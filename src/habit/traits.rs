@@ -36,6 +36,7 @@ pub trait HabitWrapper: erased_serde::Serialize {
     fn kind(&self) -> GoalKind;
     fn modify(&mut self, date: NaiveDate, event: TrackEvent);
     fn name(&self) -> String;
+    fn set_name(&mut self, name: &str);
     fn on_event(&mut self, event: Event) -> EventResult;
     fn remaining(&self, date: NaiveDate) -> u32;
     fn required_size(&mut self, _: Vec2) -> Vec2;
@@ -80,6 +81,9 @@ macro_rules! auto_habit_impl {
             }
             fn name(&self) -> String {
                 Habit::name(self)
+            }
+            fn set_name(&mut self, new_name: &str) {
+                Habit::set_name(self, new_name);
             }
             fn inner_data_ref(&self) -> &InnerData {
                 Habit::inner_data_ref(self)
