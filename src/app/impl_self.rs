@@ -49,6 +49,16 @@ impl App {
         }
     }
 
+    pub fn rename_by_name(&mut self, old_name: &str, new_name: &str) {
+        match self.habits.iter_mut().find(|h| h.name() == old_name) {
+            Some(h) => h.as_mut().set_name(new_name),
+            None => {
+                self.message
+                    .set_message(format!("Could not rename habit `{}`", old_name));
+            },
+        }
+    }
+
     pub fn get_mode(&self) -> ViewMode {
         if self.habits.is_empty() {
             return ViewMode::Day;
@@ -247,6 +257,9 @@ impl App {
                 Command::Delete(name) => {
                     self.delete_by_name(&name);
                     self.focus = 0;
+                }
+                Command::Rename(old_name, new_name) => {
+                    self.rename_by_name(&old_name, &new_name);
                 }
                 Command::TrackUp(name) => {
                     _track(&name, TrackEvent::Increment);

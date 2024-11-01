@@ -14,6 +14,7 @@ static COMMANDS: &'static [&'static str] = &[
     "add",
     "add-auto",
     "delete",
+    "rename",
     "track-up",
     "track-down",
     "month-prev",
@@ -149,6 +150,7 @@ pub enum Command {
     Add(String, Option<GoalKind>, bool),
     MonthPrev,
     MonthNext,
+    Rename(String, String),
     Delete(String),
     TrackUp(String),
     TrackDown(String),
@@ -213,6 +215,12 @@ impl Command {
                     return Err(CommandLineError::NotEnoughArgs(first, 1));
                 }
                 return Ok(Command::Delete(args[0].to_string()));
+            }
+            "rename" | "rn" => {
+                if args.len() != 2 {
+                    return Err(CommandLineError::NotEnoughArgs(first, 2));
+                }
+                Ok(Command::Rename(args[0].to_string(), args[1].to_string()))
             }
             "track-up" | "tup" => {
                 if args.is_empty() {
